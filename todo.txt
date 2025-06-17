@@ -1,0 +1,142 @@
+# todo.txt — Dynamic Build-Plate Manager for OrcaSlicer
+# Goal: full add / rename / delete support for user-defined build plates,
+#       persisted in printer + filament presets, backward-compatible,
+#       Klipper/Bambu-aware, fully translated, unit- & UI-tested.
+
+====================================================
+0. PROJECT BOOTSTRAP
+====================================================
+- [ ] Fork SoftFever/OrcaSlicer, create branch: feature/dynamic-build-plates
+- [ ] Enable pre-commit clang-format & clang-tidy (tools/hooks)
+- [ ] Copy this todo.txt into /docs/dev/
+
+====================================================
+1. CORE DATA MODEL
+====================================================
+- [ ] New file src/libslic3r/BuildPlate.hpp  
+      • struct BuildPlateDef { std::string uuid; std::string display_name; int bambu_code; int def_bed_temp; int def_bed_temp_first; double def_z_offset; }  
+      • class BuildPlateManager { static BuildPlateManager& inst(); load/save/CRUD, emits Qt signals }  
+- [ ] Replace enum BedType everywhere with using BedTypeIndex = size_t
+- [ ] Inline helper: static const BuildPlateDef& plate(BedTypeIndex)
+
+====================================================
+2. PRINTCONFIG & PRESET PERSISTENCE
+====================================================
+- [ ] src/libslic3r/PrintConfig.hpp: rename bed_type → bed_type_idx (size_t)
+- [ ] Printer preset INI: add [build_plates] section, one stanza per plate
+- [ ] Filament preset INI: replace hard-coded *_plate_temp keys with  
+      [bed_temps] uuid = "<uuid>" bed_temp = 60 first_layer = 65
+- [ ] Migration loader (Preset.cpp):  
+      • detect legacy keys cool_plate_temp … textured_pei_plate_temp  
+      • generate canonical UUIDs, create default plates, map temps
+
+====================================================
+3. G-CODE GENERATION
+====================================================
+- [ ] src/libslic3r/GCode.cpp:  
+      • auto& pd = plate(config.bed_type_idx);  
+      • PRINT_START passes CURR_BED_TYPE="pd.display_name"  
+      • if pd.bambu_code >= 0 add BBL_BED=pd.bambu_code
+- [ ] New macro {plate_uuid} for advanced start-G-code
+- [ ] Add Slic3r::log::error if bed_type_idx out of range
+
+====================================================
+4. BACKEND VALIDATION & TESTS
+====================================================
+- [ ] tests/unit/TestBuildPlateManager.cpp  
+      • CRUD ops, UUID stability, reorder, serialization round-trip
+- [ ] tests/unit/TestMigration.cpp — load v2.3 preset, expect auto-conversion
+- [ ] tests/integration/TestGcodePlate.cpp — slice cube, assert M190 values
+- [ ] Catch2 added to CMake if not present
+
+====================================================
+5. GUI — PLATE MANAGER DIALOG
+====================================================
+- [ ] New Qt dialog src/slic3r/GUI/BuildPlateDlg.{hpp,cpp}  
+      • QTableView + Add / Duplicate / Rename / Delete / Reorder  
+      • Enforce unique display_name, warn on delete in-use
+- [ ] Printer Settings ➜ Build Plate page:  
+      • Replace hard-coded combobox with model from BuildPlateManager  
+      • “Manage…” button opens dialog
+- [ ] Hook BuildPlateManager::platesChanged() → refresh combobox model
+
+====================================================
+6. GUI — FILAMENT SETTINGS TAB
+====================================================
+- [ ] Bed tab: dynamically build spinbox columns for each plate (temps first/other)  
+      • store values in ConfigOptionBedTemps (unordered_map<uuid, pair<int,int>>)
+- [ ] Connect platesChanged() to regenerate columns live
+
+====================================================
+7. Z-OFFSET PER PLATE (OPTIONAL BUT REQUESTED BY COMMUNITY)
+====================================================
+- [ ] Add double z_offset field to BuildPlateDef  
+- [ ] Printer Start-G-code sample: {if plate_z_offset != 0}SET_GCODE_OFFSET Z={plate_z_offset}{endif}
+- [ ] UI column in Printer Settings ➜ Build Plate manager table
+
+====================================================
+8. BAMBULAB NUMERIC MAP
+====================================================
+- [ ] On Add plate dialog ask for Bambu “native” code (0-9) or “auto”  
+      • auto assigns next free 10-99 range, stores in bambu_code  
+- [ ] Validate uniqueness; show red cell if collision
+
+====================================================
+9. INTERNATIONALIZATION
+====================================================
+- [ ] Add tr() wrappers for all new UI strings
+- [ ] Update translations .ts files (crowdin sync job)
+
+====================================================
+10. DOCUMENTATION & WIKI
+====================================================
+- [ ] docs/user/build_plate_manager.md — screenshots, macro examples
+- [ ] Update existing wiki page “Bed Types” to reference new manager
+- [ ] Release notes section for v2.4
+
+====================================================
+11. CLI / HEADLESS SUPPORT
+====================================================
+- [ ] src/cli/orca_cli.cpp: add --list-plates, --add-plate, --delete-plate
+- [ ] Ensure scripts can batch-rename via CLI
+
+====================================================
+12. ICONS & RESOURCES
+====================================================
+- [ ] resources/images/bbl_bed_<uuid>_{bottom,left}.svg export helper
+- [ ] Plate manager allows icon pick; copies SVGs into user_theme dir
+
+====================================================
+13. MIGRATION TOOL FOR EXISTING USERS
+====================================================
+- [ ] src/utils/migrate_presets.cpp  
+      • scans ~/.config/OrcaSlicer for legacy keys, backs up, migrates
+- [ ] Post-install wizard step: “Convert legacy plates now?” dialog
+
+====================================================
+14. PERFORMANCE & EDGE CASES
+====================================================
+- [ ] Benchmark BuildPlateManager load time vs 50 plates (stress test)
+- [ ] Cap displayed name length at 30 chars in UI
+- [ ] Handle emoji / UTF-8 in display_name
+
+====================================================
+15. CI & PACKAGING
+====================================================
+- [ ] Add unit/UI tests to GitHub Actions workflow
+- [ ] Nightly build artifact upload checks slicing with 3 random custom plates
+- [ ] Bump config schema version to 27, add assert on mismatch
+
+====================================================
+16. CODE REVIEW & MERGE
+====================================================
+- [ ] Open PR “Dynamic Build Plate Manager”  
+      • tag reviewers @SoftFever/core  
+      • link issues #836, #4655 for context  
+- [ ] Address review comments, squash, merge into main
+
+====================================================
+17. POST-MERGE FOLLOW-UPS
+====================================================
+- [ ] Update Homebrew / Winget manifests for 2.4 release
+- [ ] Close GitHub issues #836, #4655, #5851, #6663
