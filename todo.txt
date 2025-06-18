@@ -16,8 +16,11 @@
         Persistence and integration with presets pending.
       • struct BuildPlateDef { std::string uuid; std::string display_name; int bambu_code; int def_bed_temp; int def_bed_temp_first; double def_z_offset; }  
       • class BuildPlateManager { static BuildPlateManager& inst(); load/save/CRUD, emits Qt signals }  
-- [ ] Replace enum BedType everywhere with using BedTypeIndex = size_t
-- [ ] Inline helper: static const BuildPlateDef& plate(BedTypeIndex)
+- [PARTIAL] Replace enum BedType everywhere with using BedTypeIndex = size_t
+       • Added BedTypeIndex alias and constants in BuildPlate.hpp.
+       • Removed enum from PrintConfig.hpp but rest of code still uses BedType.
+- [PARTIAL] Inline helper: static const BuildPlateDef& plate(BedTypeIndex)
+       • Added inline accessor in BuildPlateManager. Further integration pending.
 
 ====================================================
 2. PRINTCONFIG & PRESET PERSISTENCE

@@ -7,6 +7,18 @@
 
 namespace Slic3r {
 
+using BedTypeIndex = size_t;
+
+// Legacy built-in bed type indices kept for compatibility
+constexpr BedTypeIndex btDefault    = 0;
+constexpr BedTypeIndex btPC        = 1;
+constexpr BedTypeIndex btEP        = 2;
+constexpr BedTypeIndex btPEI       = 3;
+constexpr BedTypeIndex btPTE       = 4;
+constexpr BedTypeIndex btPCT       = 5;
+constexpr BedTypeIndex btSuperTack = 6;
+constexpr BedTypeIndex btCount     = 7;
+
 struct BuildPlateDef {
     std::string uuid;              // unique identifier, generated if empty
     std::string display_name;      // user visible name
@@ -20,6 +32,9 @@ class BuildPlateManager
 {
 public:
     static BuildPlateManager& inst();
+
+    // Helper to access a plate definition by index
+    const BuildPlateDef& plate(BedTypeIndex idx) const { return m_plates[idx]; }
 
     // CRUD operations on build plates
     const std::vector<BuildPlateDef>& plates() const { return m_plates; }

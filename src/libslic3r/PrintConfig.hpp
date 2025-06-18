@@ -19,6 +19,7 @@
 #include "libslic3r.h"
 #include "Config.hpp"
 #include "Polygon.hpp"
+#include "BuildPlate.hpp"
 #include <boost/preprocessor/facilities/empty.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/seq/for_each.hpp>
@@ -265,17 +266,16 @@ enum OverhangFanThreshold {
     Overhang_threshold_bridge
 };
 
-// BBS
-enum BedType {
-    btDefault = 0,
-    btPC,
-    btEP,
-    btPEI,
-    btPTE,
-    btPCT,
-    btSuperTack,
-    btCount
-};
+// BBS - bed plate indices are now managed by BuildPlateManager
+using BedTypeIndex = Slic3r::BedTypeIndex;
+constexpr BedTypeIndex btDefault    = Slic3r::btDefault;
+constexpr BedTypeIndex btPC        = Slic3r::btPC;
+constexpr BedTypeIndex btEP        = Slic3r::btEP;
+constexpr BedTypeIndex btPEI       = Slic3r::btPEI;
+constexpr BedTypeIndex btPTE       = Slic3r::btPTE;
+constexpr BedTypeIndex btPCT       = Slic3r::btPCT;
+constexpr BedTypeIndex btSuperTack = Slic3r::btSuperTack;
+constexpr BedTypeIndex btCount     = Slic3r::btCount;
 
 // BBS
 enum LayerSeq {
