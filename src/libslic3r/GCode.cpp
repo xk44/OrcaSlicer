@@ -2310,6 +2310,12 @@ void GCode::_do_export(Print& print, GCodeOutputStream &file, ThumbnailsGenerato
     float outer_wall_volumetric_speed = 0.0f;
     {
         int curr_bed_type = m_config.curr_bed_type.getInt();
+        BedTypeIndex bed_type_idx = m_config.bed_type_idx.getInt();
+        if (bed_type_idx >= BuildPlateManager::inst().plates().size()) {
+            BOOST_LOG_TRIVIAL(error) << "Invalid bed_type_idx " << bed_type_idx;
+            bed_type_idx = btDefault;
+        }
+        const BuildPlateDef &pd = BuildPlateManager::inst().plate(bed_type_idx);
 
         std::string first_layer_bed_temp_str;
         const ConfigOptionInts* first_bed_temp_opt = m_config.option<ConfigOptionInts>(get_bed_temp_1st_layer_key((BedType)curr_bed_type));
@@ -2330,6 +2336,7 @@ void GCode::_do_export(Print& print, GCodeOutputStream &file, ThumbnailsGenerato
         this->placeholder_parser().set("model_name", new ConfigOptionString(print.get_model_name()));
         this->placeholder_parser().set("plate_number", new ConfigOptionString(print.get_plate_number_formatted()));
         this->placeholder_parser().set("plate_name", new ConfigOptionString(print.get_plate_name()));
+        this->placeholder_parser().set("plate_uuid", new ConfigOptionString(pd.uuid));
         this->placeholder_parser().set("first_layer_height", new ConfigOptionFloat(m_config.initial_layer_print_height.value));
 
         //add during_print_exhaust_fan_speed

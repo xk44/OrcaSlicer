@@ -40,12 +40,12 @@
 ====================================================
 3. G-CODE GENERATION
 ====================================================
-- [ ] src/libslic3r/GCode.cpp:  
-      • auto& pd = plate(config.bed_type_idx);  
-      • PRINT_START passes CURR_BED_TYPE="pd.display_name"  
+ - [PARTIAL] src/libslic3r/GCode.cpp:
+      • auto& pd = plate(config.bed_type_idx);
+      • PRINT_START passes CURR_BED_TYPE="pd.display_name"
       • if pd.bambu_code >= 0 add BBL_BED=pd.bambu_code
-- [ ] New macro {plate_uuid} for advanced start-G-code
-- [ ] Add Slic3r::log::error if bed_type_idx out of range
+ - [PARTIAL] New macro {plate_uuid} for advanced start-G-code
+ - [PARTIAL] Add Slic3r::log::error if bed_type_idx out of range
 
 ====================================================
 4. BACKEND VALIDATION & TESTS
