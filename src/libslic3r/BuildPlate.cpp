@@ -120,6 +120,14 @@ void BuildPlateManager::notify_changed()
             l->plates_changed();
 }
 
+const BuildPlateDef& BuildPlateManager::plate(BedTypeIndex idx) const
+{
+    static BuildPlateDef dummy{};
+    if (idx < m_plates.size())
+        return m_plates[idx];
+    return dummy;
+}
+
 } // namespace Slic3r
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Slic3r::BuildPlateDef, uuid, display_name, bambu_code,

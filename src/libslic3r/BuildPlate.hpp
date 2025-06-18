@@ -44,7 +44,7 @@ public:
     static std::string gen_uuid();
 
     // Helper to access a plate definition by index
-    const BuildPlateDef& plate(BedTypeIndex idx) const { return m_plates[idx]; }
+    const BuildPlateDef& plate(BedTypeIndex idx) const;
 
     // CRUD operations on build plates
     const std::vector<BuildPlateDef>& plates() const { return m_plates; }

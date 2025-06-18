@@ -15,6 +15,7 @@
 #include "ShortestPath.hpp"
 #include "Print.hpp"
 #include "Utils.hpp"
+#include "BuildPlate.hpp"
 #include "ClipperUtils.hpp"
 #include "libslic3r.h"
 #include "LocalesUtils.hpp"
@@ -1809,21 +1810,15 @@ enum BambuBedType {
 
 static BambuBedType to_bambu_bed_type(BedTypeIndex type)
 {
-    BambuBedType bambu_bed_type = bbtUnknown;
-    if (type == btPC)
-        bambu_bed_type = bbtCoolPlate;
-    else if (type == btEP)
-        bambu_bed_type = bbtEngineeringPlate;
-    else if (type == btPEI)
-        bambu_bed_type = bbtHighTemperaturePlate;
-    else if (type == btPTE)
-        bambu_bed_type = bbtTexturedPEIPlate;
-    else if (type == btPCT)
-        bambu_bed_type = bbtCoolPlate;
-    else if (type == btSuperTack)
-        bambu_bed_type = bbtSuperTackPlate;
-
-    return bambu_bed_type;
+    const auto &pd = BuildPlateManager::inst().plate(type);
+    switch (pd.bambu_code) {
+    case 1:  return bbtCoolPlate;
+    case 2:  return bbtEngineeringPlate;
+    case 3:  return bbtHighTemperaturePlate;
+    case 4:  return bbtTexturedPEIPlate;
+    case 5:  return bbtSuperTackPlate;
+    default: return bbtUnknown;
+    }
 }
 
 void GCode::_do_export(Print& print, GCodeOutputStream &file, ThumbnailsGeneratorCallback thumbnail_cb)
@@ -3149,6 +3144,10 @@ void GCode::print_machine_envelope(GCodeOutputStream &file, Print &print)
 // BBS
 int GCode::get_bed_temperature(const int extruder_id, const bool is_first_layer, BedTypeIndex bed_type_idx) const
 {
+    if (bed_type_idx >= BuildPlateManager::inst().plates().size()) {
+        BOOST_LOG_TRIVIAL(error) << "Invalid bed_type_idx " << size_t(bed_type_idx);
+        bed_type_idx = btDefault;
+    }
     std::string bed_temp_key = is_first_layer ? get_bed_temp_1st_layer_key(bed_type_idx) : get_bed_temp_key(bed_type_idx);
     const ConfigOptionInts* bed_temp_opt = m_config.option<ConfigOptionInts>(bed_temp_key);
     return bed_temp_opt->get_at(extruder_id);
