@@ -80,7 +80,7 @@
 7. Z-OFFSET PER PLATE (OPTIONAL BUT REQUESTED BY COMMUNITY)
 ====================================================
 - [DONE] Add double z_offset field to BuildPlateDef
-- [WIP] Printer Start-G-code sample: {if plate_z_offset != 0}SET_GCODE_OFFSET Z={plate_z_offset}{endif}
+ - [DONE] Printer Start-G-code sample: {if plate_z_offset != 0}SET_GCODE_OFFSET Z={plate_z_offset}{endif}
 - [ ] UI column in Printer Settings ➜ Build Plate manager table
 
 ====================================================

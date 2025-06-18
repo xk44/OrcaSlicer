@@ -7,14 +7,14 @@ You can set the bed temperature for each bed type in the filament settings as de
 
 ![bed-types](https://github.com/SoftFever/OrcaSlicer/blob/main/doc/images/bed-types.gif?raw=true)
 
-Orca also support `curr_bed_type` variable in custom G-code.
-For example, the following sample G-codes can detect the selected bed type and adjust the G-code offset accordingly for Klipper:
+Orca also supported a `curr_bed_type` variable in custom G-code.  With the new
+build plate manager the preferred approach is to use `plate_z_offset` which
+directly exposes the z offset configured for a plate.  The following sample
+G-code automatically applies the configured offset if it is not zero:
 
 ```c++
-{if curr_bed_type=="Textured PEI Plate"}
-  SET_GCODE_OFFSET Z=-0.05
-{else}
-  SET_GCODE_OFFSET Z=0.0
+{if plate_z_offset != 0}
+  SET_GCODE_OFFSET Z={plate_z_offset}
 {endif}
 ```
 
