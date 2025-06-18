@@ -1238,7 +1238,8 @@ PRINT_CONFIG_CLASS_DERIVED_DEFINE(
     // BBS
     ((ConfigOptionString,             bed_custom_texture))
     ((ConfigOptionString,             bed_custom_model))
-    ((ConfigOptionEnum<BedType>,      curr_bed_type))
+    ((ConfigOptionInt,               bed_type_idx))
+    ((ConfigOptionEnum<BedType>,      curr_bed_type)) // legacy
     ((ConfigOptionInts,               cool_plate_temp))
     ((ConfigOptionInts,               textured_cool_plate_temp))
     ((ConfigOptionInts,               supertack_plate_temp))
