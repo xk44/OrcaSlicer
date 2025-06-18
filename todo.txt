@@ -14,6 +14,8 @@
 - [PARTIAL] New file src/libslic3r/BuildPlate.hpp
       • Created BuildPlate.hpp and BuildPlate.cpp with skeleton BuildPlateManager.
         Persistence and integration with presets pending.
+      • Added BuildPlateManager::load_defaults() and gen_uuid(), default
+        plates initialized when manager first accessed.
       • struct BuildPlateDef { std::string uuid; std::string display_name; int bambu_code; int def_bed_temp; int def_bed_temp_first; double def_z_offset; }  
       • class BuildPlateManager { static BuildPlateManager& inst(); load/save/CRUD, emits Qt signals }  
 - [PARTIAL] Replace enum BedType everywhere with using BedTypeIndex = size_t
