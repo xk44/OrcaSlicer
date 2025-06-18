@@ -602,7 +602,7 @@ private:
 
     std::set<unsigned int>                  m_initial_layer_extruders;
     // BBS
-    int get_bed_temperature(const int extruder_id, const bool is_first_layer, const BedType bed_type) const;
+    int get_bed_temperature(const int extruder_id, const bool is_first_layer, BedTypeIndex bed_type_idx) const;
 
     std::string _extrude(const ExtrusionPath &path, std::string description = "", double speed = -1);
     bool _needSAFC(const ExtrusionPath &path);

@@ -1807,7 +1807,7 @@ enum BambuBedType {
     bbtSuperTackPlate = 5,
 };
 
-static BambuBedType to_bambu_bed_type(BedType type)
+static BambuBedType to_bambu_bed_type(BedTypeIndex type)
 {
     BambuBedType bambu_bed_type = bbtUnknown;
     if (type == btPC)
@@ -3147,9 +3147,9 @@ void GCode::print_machine_envelope(GCodeOutputStream &file, Print &print)
 }
 
 // BBS
-int GCode::get_bed_temperature(const int extruder_id, const bool is_first_layer, const BedType bed_type) const
+int GCode::get_bed_temperature(const int extruder_id, const bool is_first_layer, BedTypeIndex bed_type_idx) const
 {
-    std::string bed_temp_key = is_first_layer ? get_bed_temp_1st_layer_key(bed_type) : get_bed_temp_key(bed_type);
+    std::string bed_temp_key = is_first_layer ? get_bed_temp_1st_layer_key(bed_type_idx) : get_bed_temp_key(bed_type_idx);
     const ConfigOptionInts* bed_temp_opt = m_config.option<ConfigOptionInts>(bed_temp_key);
     return bed_temp_opt->get_at(extruder_id);
 }

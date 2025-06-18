@@ -338,7 +338,7 @@ enum CounterboreHoleBridgingOption {
      wtwRib
  };
 
-static std::string bed_type_to_gcode_string(const BedType type)
+static std::string bed_type_to_gcode_string(const BedTypeIndex type)
 {
     std::string type_str;
 
@@ -369,7 +369,7 @@ static std::string bed_type_to_gcode_string(const BedType type)
     return type_str;
 }
 
-static std::string get_bed_temp_key(const BedType type)
+static std::string get_bed_temp_key(const BedTypeIndex type)
 {
     if (type == btSuperTack)
         return "supertack_plate_temp";
@@ -392,7 +392,7 @@ static std::string get_bed_temp_key(const BedType type)
     return "";
 }
 
-static std::string get_bed_temp_1st_layer_key(const BedType type)
+static std::string get_bed_temp_1st_layer_key(const BedTypeIndex type)
 {
     if (type == btSuperTack)
         return "supertack_plate_temp_initial_layer";

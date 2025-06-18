@@ -8,6 +8,8 @@
 namespace Slic3r {
 
 using BedTypeIndex = size_t;
+// Temporary alias for legacy code using BedType
+using BedType = BedTypeIndex;
 
 // Legacy built-in bed type indices kept for compatibility
 constexpr BedTypeIndex btDefault    = 0;
