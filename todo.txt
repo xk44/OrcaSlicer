@@ -1,14 +1,12 @@
 # todo.txt — Dynamic Build-Plate Manager for OrcaSlicer
-# Goal: full add / rename / delete support for user-defined build plates,
+# Goal: full add / edit / rename / delete support for user-defined build plates,
 #       persisted in printer + filament presets, backward-compatible,
 #       Klipper/Bambu-aware, fully translated, unit- & UI-tested.
 
 ====================================================
 0. PROJECT BOOTSTRAP
 ====================================================
-- [ ] Fork SoftFever/OrcaSlicer, create branch: feature/dynamic-build-plates
-- [ ] Enable pre-commit clang-format & clang-tidy (tools/hooks)
-- [ ] Copy this todo.txt into /docs/dev/
+- [DONE] Fork SoftFever/OrcaSlicer, create branch: feature/dynamic-build-plates
 
 ====================================================
 1. CORE DATA MODEL
