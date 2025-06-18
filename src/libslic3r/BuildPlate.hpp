@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <nlohmann/json.hpp>
 
 namespace Slic3r {
 
@@ -30,10 +31,17 @@ struct BuildPlateDef {
     double      def_z_offset = 0.0; // default z offset
 };
 
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(BuildPlateDef, uuid, display_name, bambu_code,
+                                   def_bed_temp, def_bed_temp_first, def_z_offset)
+
 class BuildPlateManager
 {
 public:
     static BuildPlateManager& inst();
+
+    // Populate with built-in plates if no persistence file exists
+    void load_defaults();
+    static std::string gen_uuid();
 
     // Helper to access a plate definition by index
     const BuildPlateDef& plate(BedTypeIndex idx) const { return m_plates[idx]; }

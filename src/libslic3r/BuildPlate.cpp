@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <random>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -11,6 +12,8 @@ namespace Slic3r {
 BuildPlateManager& BuildPlateManager::inst()
 {
     static BuildPlateManager instance;
+    if (instance.m_plates.empty())
+        instance.load_defaults();
     return instance;
 }
 
@@ -73,6 +76,30 @@ bool BuildPlateManager::save(const std::string& path) const
     return true;
 }
 
+void BuildPlateManager::load_defaults()
+{
+    m_plates.clear();
+    m_plates.push_back({gen_uuid(), "Default Plate", -1, 0, 0, 0.0});
+    m_plates.push_back({gen_uuid(), "Cool Plate", 1, 0, 0, 0.0});
+    m_plates.push_back({gen_uuid(), "Engineering Plate", 2, 0, 0, 0.0});
+    m_plates.push_back({gen_uuid(), "High Temp Plate", 3, 0, 0, 0.0});
+    m_plates.push_back({gen_uuid(), "Textured PEI Plate", 4, 0, 0, 0.0});
+    m_plates.push_back({gen_uuid(), "Textured Cool Plate", 1, 0, 0, 0.0});
+    m_plates.push_back({gen_uuid(), "Supertack Plate", 5, 0, 0, 0.0});
+    notify_changed();
+}
+
+std::string BuildPlateManager::gen_uuid()
+{
+    static const char* hex = "0123456789abcdef";
+    std::string out;
+    out.reserve(32);
+    std::random_device rd;
+    for (int i = 0; i < 32; ++i)
+        out.push_back(hex[rd() % 16]);
+    return out;
+}
+
 void BuildPlateManager::add_listener(Listener* l)
 {
     if (std::find(m_listeners.begin(), m_listeners.end(), l) == m_listeners.end())
@@ -95,30 +122,5 @@ void BuildPlateManager::notify_changed()
 
 } // namespace Slic3r
 
-namespace nlohmann {
-
-template <> struct adl_serializer<Slic3r::BuildPlateDef> {
-    static void to_json(json& j, const Slic3r::BuildPlateDef& p)
-    {
-        j = json{
-            {"uuid", p.uuid},
-            {"display_name", p.display_name},
-            {"bambu_code", p.bambu_code},
-            {"def_bed_temp", p.def_bed_temp},
-            {"def_bed_temp_first", p.def_bed_temp_first},
-            {"def_z_offset", p.def_z_offset}
-        };
-    }
-
-    static void from_json(const json& j, Slic3r::BuildPlateDef& p)
-    {
-        j.at("uuid").get_to(p.uuid);
-        j.at("display_name").get_to(p.display_name);
-        j.at("bambu_code").get_to(p.bambu_code);
-        j.at("def_bed_temp").get_to(p.def_bed_temp);
-        j.at("def_bed_temp_first").get_to(p.def_bed_temp_first);
-        j.at("def_z_offset").get_to(p.def_z_offset);
-    }
-};
-
-} // namespace nlohmann
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Slic3r::BuildPlateDef, uuid, display_name, bambu_code,
+                                   def_bed_temp, def_bed_temp_first, def_z_offset)
