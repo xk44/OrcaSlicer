@@ -11,7 +11,9 @@
 ====================================================
 1. CORE DATA MODEL
 ====================================================
-- [ ] New file src/libslic3r/BuildPlate.hpp  
+- [PARTIAL] New file src/libslic3r/BuildPlate.hpp
+      • Created BuildPlate.hpp and BuildPlate.cpp with skeleton BuildPlateManager.
+        Persistence and integration with presets pending.
       • struct BuildPlateDef { std::string uuid; std::string display_name; int bambu_code; int def_bed_temp; int def_bed_temp_first; double def_z_offset; }  
       • class BuildPlateManager { static BuildPlateManager& inst(); load/save/CRUD, emits Qt signals }  
 - [ ] Replace enum BedType everywhere with using BedTypeIndex = size_t

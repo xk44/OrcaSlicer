@@ -454,6 +454,8 @@ set(lisbslic3r_sources
     Interlocking/InterlockingGenerator.cpp
     Interlocking/VoxelUtils.hpp
     Interlocking/VoxelUtils.cpp
+    BuildPlate.hpp
+    BuildPlate.cpp
 )
 
 if (APPLE)
