@@ -28,7 +28,8 @@
 ====================================================
 2. PRINTCONFIG & PRESET PERSISTENCE
 ====================================================
-- [ ] src/libslic3r/PrintConfig.hpp: rename bed_type → bed_type_idx (size_t)
+- [PARTIAL] src/libslic3r/PrintConfig.hpp: rename bed_type → bed_type_idx (size_t)
+      • Added new bed_type_idx ConfigOptionInt alongside legacy curr_bed_type.
 - [ ] Printer preset INI: add [build_plates] section, one stanza per plate
 - [ ] Filament preset INI: replace hard-coded *_plate_temp keys with  
       [bed_temps] uuid = "<uuid>" bed_temp = 60 first_layer = 65

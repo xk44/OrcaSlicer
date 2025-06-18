@@ -809,12 +809,18 @@ void PrintConfigDef::init_fff_params()
     def->max = 300;
     def->set_default_value(new ConfigOptionInts{45});
 
-    def = this->add("curr_bed_type", coEnum);
+    def = this->add("bed_type_idx", coInt);
+    def->label = L("Bed plate index");
+    def->tooltip = L("Index of selected build plate.");
+    def->mode = comSimple;
+    def->min = 0;
+    def->set_default_value(new ConfigOptionInt(btPC));
+
+    def = this->add("curr_bed_type", coEnum); // legacy
     def->label = L("Bed type");
     def->tooltip = L("Bed types supported by the printer.");
     def->mode = comSimple;
     def->enum_keys_map = &s_keys_map_BedType;
-    // Orca: make sure the order of the values is the same as the BedType enum 
     def->enum_values.emplace_back("Cool Plate");
     def->enum_values.emplace_back("Engineering Plate");
     def->enum_values.emplace_back("High Temp Plate");
