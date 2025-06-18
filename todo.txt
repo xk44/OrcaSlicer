@@ -50,8 +50,10 @@
 ====================================================
 4. BACKEND VALIDATION & TESTS
 ====================================================
-- [ ] tests/unit/TestBuildPlateManager.cpp  
-      • CRUD ops, UUID stability, reorder, serialization round-trip
+- [PARTIAL] tests/unit/TestBuildPlateManager.cpp
+      • CRUD ops implemented for BuildPlateManager, covering add/update/remove and
+        serialization round-trip. Reorder and comprehensive UUID stability tests
+        still pending.
 - [ ] tests/unit/TestMigration.cpp — load v2.3 preset, expect auto-conversion
 - [ ] tests/integration/TestGcodePlate.cpp — slice cube, assert M190 values
 - [ ] Catch2 added to CMake if not present

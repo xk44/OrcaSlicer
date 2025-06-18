@@ -21,9 +21,10 @@ add_executable(${_TEST_NAME}_tests
     test_optimizers.cpp
     test_png_io.cpp
     test_timeutils.cpp
-    test_indexed_triangle_set.cpp
-    ../libnest2d/printer_parts.cpp
-	)
+        test_indexed_triangle_set.cpp
+        test_buildplate_manager.cpp
+        ../libnest2d/printer_parts.cpp
+        )
 
 if (TARGET OpenVDB::openvdb)
     target_sources(${_TEST_NAME}_tests PRIVATE test_hollowing.cpp)
